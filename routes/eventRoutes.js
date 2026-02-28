@@ -34,6 +34,8 @@ router.put("/:id", async (req, res) => {
   event.startTimeUTC = updatedData.startTimeUTC;
   event.endTimeUTC = updatedData.endTimeUTC;
 
+  event.profiles = updatedData.profiles;
+
   const updated = await event.save();
 
   res.json(updated);
