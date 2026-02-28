@@ -17,28 +17,44 @@ router.get("/", async (req, res) => {
 });
 
 // Update event
+// Update event
 router.put("/:id", async (req, res) => {
-  const { updatedData } = req.body;
+  try {
+    const { updatedData } = req.body;
 
-  const event = await Event.findById(req.params.id);
+    const event = await Event.findById(req.params.id);
 
-  event.logs.push({
-    previousValues: {
-      startTimeUTC: event.startTimeUTC,
-      endTimeUTC: event.endTimeUTC,
-    },
-    newValues: updatedData,
-    updatedAtUTC: new Date(),
-  });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
 
-  event.startTimeUTC = updatedData.startTimeUTC;
-  event.endTimeUTC = updatedData.endTimeUTC;
+    // 🔥 Create clean structured log
+    event.logs.push({
+      previousValues: {
+        startTimeUTC: event.startTimeUTC,
+        endTimeUTC: event.endTimeUTC,
+        profiles: event.profiles,
+      },
+      newValues: {
+        startTimeUTC: updatedData.startTimeUTC,
+        endTimeUTC: updatedData.endTimeUTC,
+        profiles: updatedData.profiles,
+      },
+      updatedAtUTC: new Date(),
+    });
 
-  event.profiles = updatedData.profiles;
+    // 🔥 Apply updates
+    event.startTimeUTC = updatedData.startTimeUTC;
+    event.endTimeUTC = updatedData.endTimeUTC;
+    event.profiles = updatedData.profiles;
 
-  const updated = await event.save();
+    const updated = await event.save();
 
-  res.json(updated);
+    res.json(updated);
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 export default router;
