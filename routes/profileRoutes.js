@@ -5,11 +5,8 @@ const router = express.Router();
 
 // Create profile
 router.post("/", async (req, res) => {
-  const { name, timezone } = req.body;
-
-  const profile = new Profile({ name, timezone });
+  const profile = new Profile(req.body);
   const saved = await profile.save();
-
   res.json(saved);
 });
 
