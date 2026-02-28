@@ -3,7 +3,6 @@ import Profile from "../models/Profile.js";
 
 const router = express.Router();
 
-// Create profile
 router.post("/", async (req, res) => {
   try {
     const normalizedName = req.body.name.trim();
@@ -26,7 +25,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get all profiles
 router.get("/", async (req, res) => {
   const profiles = await Profile.find();
   res.json(profiles);
