@@ -22,9 +22,30 @@ const eventSchema = new mongoose.Schema(
     },
     logs: [
       {
-        previousValues: Object,
-        newValues: Object,
-        updatedAtUTC: Date,
+        previousValues: {
+          startTimeUTC: Date,
+          endTimeUTC: Date,
+          profiles: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Profile",
+            },
+          ],
+        },
+        newValues: {
+          startTimeUTC: Date,
+          endTimeUTC: Date,
+          profiles: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Profile",
+            },
+          ],
+        },
+        updatedAtUTC: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },
